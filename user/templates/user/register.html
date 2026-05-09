@@ -1,0 +1,22 @@
+{% extends 'user/base.html' %}
+{% block title %}Ro'yxatdan o'tish{% endblock %}
+{% block content %}
+<div class="card" style="max-width:480px;margin:40px auto;">
+    <h1>Ro'yxatdan o'tish</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <label>{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+            {% endif %}
+        {% endfor %}
+        {% if form.non_field_errors %}
+            <div class="error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Ro'yxatdan o'tish</button>
+    </form>
+    <p style="margin-top:15px;font-size:14px;">Hisobingiz bormi? <a href="/login/">Kirish</a></p>
+</div>
+{% endblock %}

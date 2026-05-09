@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+{% block title %}Barcha maqolalar{% endblock %}
+{% block content %}
+<h1>Barcha maqolalar</h1>
+
+{% if user.is_authenticated %}
+<div class="card">
+    <h2>Yangi maqola qo'shish</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label>Sarlavha</label>
+        <input type="text" name="title" value="{{ form.title.value|default:'' }}" required>
+        {% if form.title.errors %}<ul class="errorlist">{% for e in form.title.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        <label>Matn</label>
+        <textarea name="context" required>{{ form.context.value|default:'' }}</textarea>
+        {% if form.context.errors %}<ul class="errorlist">{% for e in form.context.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        <label>Teglar</label>
+        <div class="checkbox-group">{{ form.tags }}</div>
+        <button type="submit" class="btn btn-primary">Qo'shish</button>
+    </form>
+</div>
+{% endif %}
+
+{% for article in articles %}
+<div class="card">
+    <h2><a href="/articles/{{ article.slug }}/" style="text-decoration:none;color:#2c3e50;">{{ article.title }}</a></h2>
+    <p class="meta">✍️ {{ article.author.username }} &nbsp;|&nbsp; 📅 {{ article.created_at|date:"d.m.Y H:i" }}</p>
+    <p style="font-size:14px;color:#555;">{{ article.context|truncatewords:30 }}</p>
+    <div style="margin-top:8px;">
+        {% for tag in article.tags.all %}<span class="tag">#{{ tag.name }}</span>{% endfor %}
+    </div>
+    <div class="actions">
+        <a href="/articles/{{ article.slug }}/" class="btn btn-secondary">Batafsil</a>
+        {% if user == article.author %}
+            <a href="/articles/{{ article.slug }}/edit/" class="btn btn-warning">Tahrirlash</a>
+            <a href="/articles/{{ article.slug }}/delete/" class="btn btn-danger">O'chirish</a>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+<div class="card"><p>Hali maqolalar yo'q.</p></div>
+{% endfor %}
+{% endblock %}

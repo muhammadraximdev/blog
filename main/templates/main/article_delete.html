@@ -1,0 +1,18 @@
+{% extends 'main/base.html' %}
+{% block title %}O'chirish{% endblock %}
+{% block content %}
+<div class="card" style="max-width:500px;margin:40px auto;">
+    <h1>Maqolani o'chirish</h1>
+    <p style="margin-bottom:20px;">
+        <strong>"{{ article.title }}"</strong> maqolasini o'chirishni tasdiqlaysizmi?
+        Bu amalni qaytarib bo'lmaydi.
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="actions">
+            <button type="submit" class="btn btn-danger">Ha, o'chirish</button>
+            <a href="/articles/{{ article.slug }}/" class="btn btn-secondary">Bekor qilish</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

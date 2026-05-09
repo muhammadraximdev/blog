@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+{% block title %}Mening maqolalarim{% endblock %}
+{% block content %}
+<h1>Mening maqolalarim</h1>
+<div style="margin-bottom:20px;">
+    <a href="/articles/" class="btn btn-primary">+ Yangi maqola</a>
+</div>
+{% for article in articles %}
+<div class="card">
+    <h2><a href="/articles/{{ article.slug }}/" style="text-decoration:none;color:#2c3e50;">{{ article.title }}</a></h2>
+    <p class="meta">📅 {{ article.created_at|date:"d.m.Y H:i" }}</p>
+    <p style="font-size:14px;color:#555;">{{ article.context|truncatewords:25 }}</p>
+    <div style="margin-top:8px;">
+        {% for tag in article.tags.all %}<span class="tag">#{{ tag.name }}</span>{% endfor %}
+    </div>
+    <div class="actions">
+        <a href="/articles/{{ article.slug }}/" class="btn btn-secondary">Ko'rish</a>
+        <a href="/articles/{{ article.slug }}/edit/" class="btn btn-warning">Tahrirlash</a>
+        <a href="/articles/{{ article.slug }}/delete/" class="btn btn-danger">O'chirish</a>
+    </div>
+</div>
+{% empty %}
+<div class="card"><p>Siz hali maqola yozmadingiz.</p></div>
+{% endfor %}
+{% endblock %}
